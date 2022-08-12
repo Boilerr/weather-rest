@@ -14,7 +14,7 @@ public class WeatherData {
     private long id;
 
     @Column(name = "date")
-    private Date date;
+    private String date;
 
     @Column(name = "lat")
     private double lat;
@@ -32,7 +32,7 @@ public class WeatherData {
     private float[] temperatures;
 
 
-    public WeatherData(Date date, double lat, double lon, String city, String state, float[] temperatures) {
+    public WeatherData(String date, double lat, double lon, String city, String state, float[] temperatures) {
         this.date = date;
         this.lat = lat;
         this.lon = lon;
