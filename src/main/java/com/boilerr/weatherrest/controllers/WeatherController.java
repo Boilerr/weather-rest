@@ -1,5 +1,6 @@
 package com.boilerr.weatherrest.controllers;
 
+import com.boilerr.weatherrest.exceptions.ResourceNotFoundException;
 import com.boilerr.weatherrest.models.WeatherData;
 import com.boilerr.weatherrest.repositorys.WeatherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,10 @@ public class WeatherController {
     private WeatherRepository weatherRepository;
 
     @PostMapping("/")
+    @ResponseStatus(HttpStatus.CREATED)
     public WeatherData postNewWeatherData(@RequestBody WeatherData weatherData) {
         System.out.println(new Timestamp(new Date().getTime()) + "    POST request to: /weather");
+
         return weatherRepository.save(weatherData);
     }
 
@@ -31,7 +34,11 @@ public class WeatherController {
     @GetMapping("/{id}")
     public Optional<WeatherData> showWeatherDateById(@PathVariable long id) {
         System.out.println(new Timestamp(new Date().getTime()) + "    GET request to: /weather/" + id);
-        return weatherRepository.findById(id);
-    }
 
+        Optional<WeatherData> weatherData = weatherRepository.findById(id);
+        if (weatherData.isPresent()) {
+            return weatherData;
+        } else throw new ResourceNotFoundException("not found " + id);
+
+    }
 }
