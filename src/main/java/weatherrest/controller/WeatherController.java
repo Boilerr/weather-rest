@@ -1,5 +1,7 @@
 package weatherrest.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,7 @@ public class WeatherController {
 
     @Autowired
     private WeatherRepository weatherRepository;
-
+    private static final Logger log = LoggerFactory.getLogger(WeatherController.class);
 
     /**
      * POST request to `/weather`:
@@ -30,9 +32,10 @@ public class WeatherController {
     @PostMapping("")
     //@ResponseStatus(HttpStatus.CREATED)
     public WeatherData saveNewWeatherData(@RequestBody WeatherData weatherData) {
-        System.out.println(new Timestamp(new Date().getTime()) + "    POST request to: /weather");
-
-        return weatherRepository.save(weatherData);
+        log.info("POST request to /weather with incoming data: " + weatherData);
+        WeatherData weatherData1 = weatherRepository.save(weatherData);
+        log.info("POST request to /weather saved as: " + weatherData1);
+        return weatherData1;
     }
 
 
@@ -46,9 +49,8 @@ public class WeatherController {
      */
     @GetMapping("")
     public List<WeatherData> getAllWeatherOnly() {
-        System.out.println(new Timestamp(new Date().getTime()) + "    GET getAllWeatherOnly request to: /weather");
         List<WeatherData> weatherData = weatherRepository.findAll();
-        System.out.println(new Timestamp(new Date().getTime()) + "    GET getAllWeatherOnly request to: /weather" + weatherData.size());
+        log.info("GET request to /weather, find: " + weatherData.size() + " weather data");
         return weatherData;
     }
 
@@ -61,12 +63,15 @@ public class WeatherController {
      */
     @GetMapping("/{weatherId}")
     public Optional<WeatherData> getOneById(@PathVariable Long weatherId) {
-        System.out.println(new Timestamp(new Date().getTime()) + "    GET request to: /weather/" + weatherId);
 
         Optional<WeatherData> weatherData = weatherRepository.findById(weatherId);
         if (weatherData.isPresent()) {
+            log.info("GET request to /weather/" + weatherId + " return " + weatherData.get());
             return weatherData;
-        } else throw new ResourceNotFoundException("not found getOneById" + weatherId);
+        } else {
+            log.info("GET request to /weather/" + weatherId + " failed with ResourceNotFoundException");
+            throw new ResourceNotFoundException("Not found " + weatherId);
+        }
     }
 
 
@@ -77,12 +82,13 @@ public class WeatherController {
      */
     @DeleteMapping("/{weatherId}")
     public ResponseEntity<?> deleteOneWeatherById(@PathVariable Long weatherId) {
-        System.out.println(new Timestamp(new Date().getTime()) + "    DeleteMapping to: /weather" + weatherId);
 
         if (!weatherRepository.existsById(weatherId)) {
-            throw new ResourceNotFoundException("Weather not found with id " + weatherId);
+            log.info("DELETE request to /weather/" + weatherId + " failed with ResourceNotFoundException");
+            throw new ResourceNotFoundException("Not found " + weatherId);
         }
         weatherRepository.deleteById(weatherId);
+        log.info("DELETE request to /weather/" + weatherId + " succeed");
         return ResponseEntity.status(HttpStatus.OK).build();
         // TODO: 17.10.23  weatherRepository.deleteById(weatherId); .orElseThrow ResourceNotFoundException. When resource delete between operation
 

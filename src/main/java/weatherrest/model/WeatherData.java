@@ -2,6 +2,8 @@ package weatherrest.model;
 
 import jakarta.persistence.*;
 
+import java.util.Arrays;
+
 
 @Entity
 @Table(name = "weather")
@@ -26,6 +28,7 @@ public class WeatherData {
 
     @Column(name = "state")
     private String state;
+
 
     @Column(name = "temperatures")
     private float[] temperatures;
@@ -103,5 +106,18 @@ public class WeatherData {
         this.temperatures = temperatures;
     }
 
+
+    @Override
+    public String toString() {
+        return "WeatherData{" +
+                "id=" + id +
+                ", date='" + date + '\'' +
+                ", lat=" + lat +
+                ", lon=" + lon +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", temperatures=" + Arrays.toString(temperatures) +
+                '}';
+    }
 
 }
