@@ -3,6 +3,7 @@ package weatherrest.model;
 import jakarta.persistence.*;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 
 @Entity
@@ -104,6 +105,24 @@ public class WeatherData {
 
     public void setTemperatures(float[] temperatures) {
         this.temperatures = temperatures;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+        WeatherData that = (WeatherData) o;
+        return id == that.id && Double.compare(lat, that.lat) == 0 && Double.compare(lon, that.lon) == 0 && Objects.equals(date, that.date) && Objects.equals(city, that.city) && Objects.equals(state, that.state) && Arrays.equals(temperatures, that.temperatures);
+    }
+
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, date, lat, lon, city, state);
+        result = 31 * result + Arrays.hashCode(temperatures);
+        return result;
     }
 
 
