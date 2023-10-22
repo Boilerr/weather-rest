@@ -1,5 +1,6 @@
 package weatherrest.controller;
 
+import jakarta.persistence.Column;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,6 @@ import weatherrest.exception.ResourceNotFoundException;
 import weatherrest.model.WeatherData;
 import weatherrest.repository.WeatherRepository;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,21 +20,11 @@ import java.util.Optional;
 public class WeatherController {
 
     @Autowired
-    private WeatherRepository weatherRepository;
+    private final WeatherRepository weatherRepository;
     private static final Logger log = LoggerFactory.getLogger(WeatherController.class);
 
-    /**
-     * POST request to `/weather`:
-     * Crates a new weather data record
-     * the response code is 201, and the response body is the created record, including its unique id
-     */
-    @PostMapping("")
-    //@ResponseStatus(HttpStatus.CREATED)
-    public WeatherData saveNewWeatherData(@RequestBody WeatherData weatherData) {
-        log.info("POST request to /weather with incoming data: " + weatherData);
-        WeatherData weatherData1 = weatherRepository.save(weatherData);
-        log.info("POST request to /weather saved as: " + weatherData1);
-        return weatherData1;
+    WeatherController(WeatherRepository weatherRepository) {
+        this.weatherRepository = weatherRepository;
     }
 
 
@@ -48,9 +37,9 @@ public class WeatherController {
      * - `sort`, either "date" or "-date", for example `/weather/?sort=-date.` If the value is "date", then the ordering is by date in ascending order.If it is "-date", then the ordering is by date in descending order.If there are two records with the same date, the one with the smaller id must come first.
      */
     @GetMapping("")
-    public List<WeatherData> getAllWeatherOnly() {
+    List<WeatherData> getAllWeatherOnly() {
         List<WeatherData> weatherData = weatherRepository.findAll();
-        log.info("GET request to /weather, find: " + weatherData.size() + " weather data");
+        log.info("GET request to /weather, find: " + weatherData.size() + " weather data and send");
         return weatherData;
     }
 
@@ -62,16 +51,57 @@ public class WeatherController {
      * if there is no record in the collection with the given id, the response code is 404
      */
     @GetMapping("/{weatherId}")
-    public Optional<WeatherData> getOneById(@PathVariable Long weatherId) {
+    Optional<WeatherData> getOneById(@PathVariable Long weatherId) {
 
-        Optional<WeatherData> weatherData = weatherRepository.findById(weatherId);
-        if (weatherData.isPresent()) {
-            log.info("GET request to /weather/" + weatherId + " return " + weatherData.get());
-            return weatherData;
+        Optional<WeatherData> optionalWeatherData = weatherRepository.findById(weatherId);
+        if (optionalWeatherData.isPresent()) {
+            log.info("GET request to /weather/" + weatherId + " and DB return " + optionalWeatherData.get());
+            return optionalWeatherData;
         } else {
             log.info("GET request to /weather/" + weatherId + " failed with ResourceNotFoundException");
-            throw new ResourceNotFoundException("Not found " + weatherId);
+            throw new ResourceNotFoundException("Not found 543453" + weatherId);
         }
+    }
+
+
+    /**
+     * POST request to `/weather`:
+     * Crates a new weather data record
+     * the response code is 201, and the response body is the created record, including its unique id
+     */
+    @PostMapping("")
+    //@ResponseStatus(HttpStatus.CREATED)
+    WeatherData saveNewWeatherData(@RequestBody WeatherData weatherData) {
+        log.info("POST request to /weather with incoming data:            " + weatherData);
+        WeatherData savedWeatherData = weatherRepository.save(weatherData);
+        log.info("POST request to /weather successful and saved in DB as: " + savedWeatherData);
+        return savedWeatherData;
+    }
+
+
+    /**
+     * PUT Behavior:
+     * 1. If repository contain WeatherData with this Id - overwrite new data above old, without change Id
+     * 2. If repository `Not` contain WeatherData with this Id - put weatherId in newWeatherData, and save in repository
+     */
+    @PutMapping("/{weatherId}")
+    WeatherData putWeatherData(@RequestBody WeatherData newWeatherData, @PathVariable Long id) {
+
+        return weatherRepository.findById(id)
+                .map(weatherData -> {
+                    weatherData.setDate(newWeatherData.getDate());
+                    weatherData.setLat(newWeatherData.getLat());
+                    weatherData.setLon(newWeatherData.getLon());
+                    weatherData.setCity(newWeatherData.getCity());
+                    weatherData.setState(newWeatherData.getState());
+                    weatherData.setTemperatures(newWeatherData.getTemperatures());
+
+                    return weatherRepository.save(weatherData);
+                })
+                .orElseGet(() -> {
+                    newWeatherData.setId(id);
+                    return weatherRepository.save(newWeatherData);
+                });
     }
 
 
@@ -81,7 +111,7 @@ public class WeatherController {
      * if there was no record in the database with the given id, the response code is 404
      */
     @DeleteMapping("/{weatherId}")
-    public ResponseEntity<?> deleteOneWeatherById(@PathVariable Long weatherId) {
+    ResponseEntity<?> deleteOneWeatherById(@PathVariable Long weatherId) {
 
         if (!weatherRepository.existsById(weatherId)) {
             log.info("DELETE request to /weather/" + weatherId + " failed with ResourceNotFoundException");
