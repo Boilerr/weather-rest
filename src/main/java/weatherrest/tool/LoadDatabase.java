@@ -59,7 +59,7 @@ class LoadDatabase {
             weatherRepository.save(new WeatherData("1985-01-01", 36.1189, -86.6892, "Virginia Beach", "Virginia", new float[]{17.3f, 16.8f, 16.4f, 16.0f, 15.6f, 15.3f, 15.0f, 14.9f, 15.8f, 18.0f, 20.2f, 22.3f, 23.8f, 24.9f, 25.5f, 25.7f, 24.9f, 23.0f, 21.7f, 20.8f, 29.9f, 29.2f, 28.6f, 28.1f}));
             weatherRepository.save(new WeatherData("1985-01-01", 36.1189, -86.6892, "Long Beach", "California", new float[]{17.3f, 16.8f, 16.4f, 16.0f, 15.6f, 15.3f, 15.0f, 14.9f, 15.8f, 18.0f, 20.2f, 22.3f, 23.8f, 24.9f, 25.5f, 25.7f, 24.9f, 23.0f, 21.7f, 20.8f, 29.9f, 29.2f, 28.6f, 28.1f}));
 
-            log.info("Load 20 Weather data");
+            log.info("LoadDatabase add 42 Weather data to DB for your convenience");
         };
     }
 }

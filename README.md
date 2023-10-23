@@ -1,6 +1,7 @@
-# Weather REST API
+# Weather REST
 
-
+## Weather REST API 
+- Weather REST API.md
 
 ## Installing / Getting started
 1. Clone project
