@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import weatherrest.exception.ResourceNotFoundException;
 import weatherrest.model.WeatherData;
@@ -19,9 +20,9 @@ import java.util.Optional;
 @RequestMapping("weather")
 public class WeatherController {
 
+    private static final Logger log = LoggerFactory.getLogger(WeatherController.class);
     @Autowired
     private final WeatherRepository weatherRepository;
-    private static final Logger log = LoggerFactory.getLogger(WeatherController.class);
 
     WeatherController(WeatherRepository weatherRepository) {
         this.weatherRepository = weatherRepository;
@@ -100,6 +101,7 @@ public class WeatherController {
                 })
                 .orElseGet(() -> {
                     newWeatherData.setId(id);
+
                     return weatherRepository.save(newWeatherData);
                 });
     }
@@ -124,4 +126,10 @@ public class WeatherController {
 
 
     }
+    @Transactional
+    @DeleteMapping("")
+    void deleteByCity(@RequestParam String city) {
+        weatherRepository.deleteByCity(city);
+    }
+
 }
