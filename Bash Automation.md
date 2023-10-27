@@ -1,10 +1,12 @@
 # Bash Automation
 
-This file formatted in IDEA style run script
+This file formatted in IDEA style run script, try open it in IntelliJ IDEA  
+Works from file and markdown rendering with good look
 
 
 ## GET
 ----------------------------------------
+
 ```shell
 curl http://localhost:8080/weather/43 | json_pp
 ```
@@ -29,20 +31,22 @@ curl -H "Accept: application/json" http://localhost:8080/weather/18 | json_pp
 curl --no-progress-meter -H "Accept: application/json" http://localhost:8080/weather/185 | json_pp
 ```
 
+- get `-d` data from file and add two `-H` Headers for request
+
 ```shell
-## data from file and two Headers
 curl -d @request.json -H "Content-Type: application/json" -H "Accept: application/json" http://localhost:8080/weather
 ```
 
-
 ## POST
 ----------------------------------------
+
 ```shell
 curl -X POST localhost:8080/weather
 ```  
 
+- POST with `-H` one header and data `-d` in body
+
 ```shell
-# POST with body
 curl -X POST localhost:8080/weather -H 'Content-type:application/json' -d '{"name": "String", "role": "String"}'
 ```
 
@@ -54,23 +58,22 @@ curl -X POST localhost:8080/weather -H 'Content-Type: application/json' -d '{"da
 curl -vX POST http://localhost:8080/weather -H 'Content-Type: application/json' -H "Accept: application/json" -d '{"date":"1985-01-01","lat":36.1189,"lon":-86.6892,"city":"ntgvuawjar","state":"eakkqhssvz","temperatures":[17.3,16.8,16.4,16.0,15.6,15.3,15.0,14.9,15.8,18.0,20.2,22.3,23.8,24.9,25.5,25.7,24.9,23.0,21.7,20.8,29.9,29.2,28.6,28.1]}'
 ```
 
-
 ## PUT
 ----------------------------------------
 
 ```shell
-# PUT with body
 curl -X PUT localhost:8080/weather -H 'Content-type:application/json' -d '{"name": "String", "role": "String"}'
 ```
 
-```shell
-## data from file and PUT method
-curl -d @request.json -H 'Content-Type: application/json' -X PUT http://localhost:8080/weather
-```
+- data from file and PUT method
 
+```shell
+curl -X PUT http://localhost:8080/weather -H 'Content-Type: application/json' -d @request.json  
+```
 
 ## DELETE
 ----------------------------------------
+
 ```shell
 curl -vX DELETE localhost:8080/weather/3 | json_pp
 ```
@@ -87,13 +90,49 @@ curl -vX DELETE localhost:8080/weather?city=Houston
 curl -vX DELETE localhost:8080/weather?state=California
 ````
 
-
-
 ## Prettify json with json_pp
 
+- GET All data!
+
 ```shell
-# GET weather and prettify with json_pp
 curl -v localhost:8080/weather | json_pp
+```
+
+- GET one by id
+
+```shell
+curl -v localhost:8080/weather/12 | json_pp
+```
+
+## Write to file
+
+- Write to file response.json. With Append!
+
+```shell
+curl -vs http://localhost:8080/weather/19 >> response.json
+```
+
+- Write ALL data from curl to a file, with Append
+
+```shell
+curl -vs http://localhost:8080/weather/19 >> response.json 2>&1
+echo "" >> response.json
+```
+
+- Write to file response.json. With Append! and prettify. Write only prettify json!
+
+```shell
+curl http://localhost:8080/weather/19 | json_pp >> response.json
+```
+
+```shell
+curl -v http://localhost:8080/weather/19 >> response.json
+```
+
+- Write to file response.json. Not Append!
+
+```shell
+curl http://localhost:8080/weather/19 -o response.json
 ```
 
 ## curl parameters
