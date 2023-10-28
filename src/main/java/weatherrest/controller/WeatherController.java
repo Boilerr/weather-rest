@@ -1,9 +1,11 @@
 package weatherrest.controller;
 
-import jakarta.persistence.Column;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +44,19 @@ public class WeatherController {
         List<WeatherData> weatherData = weatherRepository.findAll();
         log.info("GET request to /weather, find: " + weatherData.size() + " weather data and send");
         return weatherData;
+    }
+
+
+    @GetMapping(path = "", params = {"page", "size"})
+    Page<WeatherData> getAllWeatherWithPageable(@RequestParam("page") int pageNumber, @RequestParam("size") int pageSize) {
+        log.info("GET request to /weather with params: page number=" + pageNumber + " page size=" + pageSize);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<WeatherData> weatherDataPage = weatherRepository.findAll(pageable);
+        if (pageNumber > weatherDataPage.getTotalPages()) {
+            throw new ResourceNotFoundException("Request wants " + pageNumber + " pages, but jpa have only: " + weatherDataPage.getTotalPages());
+        }
+        log.info("GET request to /weather with params, find: " + weatherDataPage.getNumberOfElements() + " elements");
+        return weatherDataPage;
     }
 
 
