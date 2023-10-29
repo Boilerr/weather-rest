@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -46,16 +47,55 @@ public class WeatherController {
         return weatherData;
     }
 
-
+    /**
+     * Get with Pageable
+     *
+     * @param pageNumber amount of pages
+     * @param pageSize   page size
+     * @return Page<WeatherData>
+     */
     @GetMapping(path = "", params = {"page", "size"})
     Page<WeatherData> getAllWeatherWithPageable(@RequestParam("page") int pageNumber, @RequestParam("size") int pageSize) {
-        log.info("GET request to /weather with params: page number=" + pageNumber + " page size=" + pageSize);
+        log.info("GET request to /weather with Pageable: page number=" + pageNumber + " page size=" + pageSize);
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<WeatherData> weatherDataPage = weatherRepository.findAll(pageable);
         if (pageNumber > weatherDataPage.getTotalPages()) {
             throw new ResourceNotFoundException("Request wants " + pageNumber + " pages, but jpa have only: " + weatherDataPage.getTotalPages());
         }
-        log.info("GET request to /weather with params, find: " + weatherDataPage.getNumberOfElements() + " elements");
+        log.info("GET request to /weather with Pageable, find: " + weatherDataPage.getNumberOfElements() + " elements");
+        return weatherDataPage;
+    }
+
+    /**
+     * Get with Pageable and Sorting
+     *
+     * @param pageNumber amount of pages
+     * @param pageSize   page size
+     * @param sortByCity name of column for sorting
+     * @param sortOrder  true=ascending, false=descending
+     * @return Page<WeatherData>
+     */
+    @GetMapping(path = "", params = {"page", "size", "sort", "order"})
+    Page<WeatherData> getAllWeatherWithPageableAndSorting(@RequestParam("page") int pageNumber,
+                                                          @RequestParam("size") int pageSize,
+                                                          @RequestParam("sort") String sortByCity,
+                                                          @RequestParam("order") boolean sortOrder) {
+        log.info("GET request to /weather with PageableAndSorting: page number=" + pageNumber + "; page size=" + pageSize + "; sort=" + sortByCity + "; order=" + sortOrder + ";");
+
+        Sort sort;
+        if (sortOrder) {
+            sort = Sort.by(sortByCity).ascending();
+        } else {
+            sort = Sort.by(sortByCity).descending();
+        }
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+        Page<WeatherData> weatherDataPage = weatherRepository.findAll(pageable);
+
+        if (pageNumber > weatherDataPage.getTotalPages()) {
+            throw new ResourceNotFoundException("Request wants " + pageNumber + " pages, but jpa have only: " + weatherDataPage.getTotalPages());
+        }
+        log.info("GET request to /weather with PageableAndSorting, find: " + weatherDataPage.getNumberOfElements() + " elements");
         return weatherDataPage;
     }
 
