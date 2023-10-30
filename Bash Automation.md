@@ -6,35 +6,47 @@ Works from file and markdown rendering with good look
 
 ## GET
 ----------------------------------------
-
+- GET All weather
 ```shell
-curl http://localhost:8080/weather/43 | json_pp
+curl http://localhost:8080/weather | json_pp
 ```
-
 ```shell
-curl -v http://localhost:8080/weather/55
+curl -vH "Accept: application/json" http://localhost:8080/weather
 ```
-
+- GET weather by id
 ```shell
-curl -v -H "Accept: application/json" http://localhost:8080/weather
+curl http://localhost:8080/weather/22 
 ```
-
 ```shell
 curl -vH "Accept: application/json" http://localhost:8080/weather/4
 ```
-
 ```shell
-curl -H "Accept: application/json" http://localhost:8080/weather/18 | json_pp
+curl -v http://localhost:8080/weather/22 | json_pp
 ```
-
+```shell
+curl -v http://localhost:8080/weather/55
+```
 ```shell
 curl --no-progress-meter -H "Accept: application/json" http://localhost:8080/weather/185 | json_pp
 ```
-
-- get `-d` data from file and add two `-H` Headers for request
-
+- GET with `-d` data from file and add two `-H` Headers for request
 ```shell
 curl -d @request.json -H "Content-Type: application/json" -H "Accept: application/json" http://localhost:8080/weather
+```
+
+## GET with @RequestParam, `&` break curl, fix with use `''`
+- GET with Page Number:2 and Page Size: 2
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/weather?page=2&size=2' | json_pp
+```
+
+- Test Exception with GET with Page Number:99 and Page Size: 20
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/weather?page=99&size=20'
+```
+- ("page") int pageNumber, ("size") int pageSize,("sort") String sortByCity, ("order") boolean sortOrder)
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/weather?page=5&size=5&sort=city&order=true' | json_pp
 ```
 
 ## POST
