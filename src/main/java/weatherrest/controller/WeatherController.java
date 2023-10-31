@@ -3,10 +3,7 @@ package weatherrest.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -117,6 +114,31 @@ public class WeatherController {
             log.info("GET request to /weather/" + weatherId + " failed with ResourceNotFoundException");
             throw new ResourceNotFoundException("Not found 543453" + weatherId);
         }
+    }
+
+    /**
+     * GET with optional @RequestParam
+     *
+     * @param state (required = false)
+     * @param city  (required = false)
+     * @return List<WeatherData>
+     */
+    @GetMapping(path = "/opt")
+    List<WeatherData> getWeathersByExample(@RequestParam(required = false) String state, @RequestParam(required = false) String city) {
+        log.info("GET request to /weather with getWeathersByExample: state= " + state + " city=" + city);
+
+        WeatherData weatherDataExample = new WeatherData();
+        weatherDataExample.setState(state);
+        weatherDataExample.setCity(city);
+
+        log.info("GET request to /weather with getWeathersByExample: and create new WeatherData: " + weatherDataExample);
+
+        Example<WeatherData> example = Example.of(weatherDataExample);
+
+        List<WeatherData> actual = weatherRepository.findAll(example);
+
+        log.info("GET request to /weather with getWeathersByExample:  and return: " + actual);
+        return actual;
     }
 
 

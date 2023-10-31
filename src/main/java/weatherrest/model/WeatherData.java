@@ -13,16 +13,16 @@ public class WeatherData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @Column(name = "date")
     private String date;
 
     @Column(name = "lat")
-    private double lat;
+    private Double lat;
 
     @Column(name = "lon")
-    private double lon;
+    private Double lon;
 
     @Column(name = "city")
     private String city;
@@ -37,7 +37,7 @@ public class WeatherData {
     // Constructors
 
     // Constructor without id
-    public WeatherData(String date, double lat, double lon, String city, String state, float[] temperatures) {
+    public WeatherData(String date, Double lat, Double lon, String city, String state, float[] temperatures) {
         this.date = date;
         this.lat = lat;
         this.lon = lon;
@@ -51,11 +51,11 @@ public class WeatherData {
 
     // Getters and Setters for all fields
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -67,19 +67,19 @@ public class WeatherData {
         this.date = date;
     }
 
-    public double getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(double lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
-    public double getLon() {
+    public Double getLon() {
         return lon;
     }
 
-    public void setLon(double lon) {
+    public void setLon(Double lon) {
         this.lon = lon;
     }
 
@@ -114,7 +114,7 @@ public class WeatherData {
 
         if (o == null || getClass() != o.getClass()) return false;
         WeatherData that = (WeatherData) o;
-        return id == that.id && Double.compare(lat, that.lat) == 0 && Double.compare(lon, that.lon) == 0 && Objects.equals(date, that.date) && Objects.equals(city, that.city) && Objects.equals(state, that.state) && Arrays.equals(temperatures, that.temperatures);
+        return Objects.equals(id, that.id) && Objects.equals(date, that.date) && Objects.equals(lat, that.lat) && Objects.equals(lon, that.lon) && Objects.equals(city, that.city) && Objects.equals(state, that.state) && Arrays.equals(temperatures, that.temperatures);
     }
 
 
