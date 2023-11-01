@@ -4,7 +4,7 @@ This file formatted in IDEA style run script, try open it in IntelliJ IDEA
 Works from file and markdown rendering with good look
 
 
-## GET
+GET
 ----------------------------------------
 - GET All weather
 ```shell
@@ -48,8 +48,24 @@ curl -v -H "Accept: application/json" 'http://localhost:8080/weather?page=99&siz
 ```shell
 curl -v -H "Accept: application/json" 'http://localhost:8080/weather?page=5&size=5&sort=city&order=true' | json_pp
 ```
+- Check @RequestParam state and city
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/weather/opt?state=Texas&city=Austin' | json_pp
+```
+- Check optional @RequestParam state
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/weather/opt?state=Maryland' | json_pp
+```
+- Check optional @RequestParam state
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/weather/opt?state=Texas' | json_pp
+```
+- Check optional @RequestParam city
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/weather/opt?city=Boston' | json_pp
+```
 
-## POST
+POST
 ----------------------------------------
 
 ```shell
@@ -70,7 +86,7 @@ curl -X POST localhost:8080/weather -H 'Content-Type: application/json' -d '{"da
 curl -vX POST http://localhost:8080/weather -H 'Content-Type: application/json' -H "Accept: application/json" -d '{"date":"1985-01-01","lat":36.1189,"lon":-86.6892,"city":"ntgvuawjar","state":"eakkqhssvz","temperatures":[17.3,16.8,16.4,16.0,15.6,15.3,15.0,14.9,15.8,18.0,20.2,22.3,23.8,24.9,25.5,25.7,24.9,23.0,21.7,20.8,29.9,29.2,28.6,28.1]}'
 ```
 
-## PUT
+PUT
 ----------------------------------------
 
 ```shell
@@ -83,7 +99,7 @@ curl -X PUT localhost:8080/weather -H 'Content-type:application/json' -d '{"name
 curl -X PUT http://localhost:8080/weather -H 'Content-Type: application/json' -d @request.json  
 ```
 
-## DELETE
+DELETE
 ----------------------------------------
 
 ```shell
