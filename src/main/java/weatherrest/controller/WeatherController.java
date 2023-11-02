@@ -141,6 +141,26 @@ public class WeatherController {
         return actual;
     }
 
+    @GetMapping(path = "/opt")
+    List<WeatherData> getWeathersByExampleWithSort(@RequestParam(required = false) String state, @RequestParam(required = false) String city, @RequestParam(required = false) String sortCity) {
+        log.info("GET request to /weather with getWeathersByExample: state= " + state + " city=" + city + " sortCity=" + sortCity);
+
+        WeatherData weatherDataExample = new WeatherData();
+        weatherDataExample.setState(state);
+        weatherDataExample.setCity(city);
+
+        log.info("GET request to /weather with getWeathersByExample: and create new WeatherData: " + weatherDataExample);
+
+        Example<WeatherData> example = Example.of(weatherDataExample);
+        Sort sort = Sort.by(Sort.Order.asc("city"));
+        //Sort sort = Sort.by(Sort.Order.asc(PostComment_.CREATED_ON))
+        List<WeatherData> actual = weatherRepository.findAll(example, sort);
+        //<S extends T> List<S> findAll(Example<S> example, Sort sort);
+        log.info("GET request to /weather with getWeathersByExample:  and return: " + actual);
+        return actual;
+    }
+
+
 
     /**
      * POST request to `/weather`:
