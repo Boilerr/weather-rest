@@ -13,6 +13,7 @@ import weatherrest.model.WeatherData;
 import weatherrest.repository.WeatherRepository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -142,24 +143,35 @@ public class WeatherController {
     }
 
     @GetMapping(path = "/opt")
-    List<WeatherData> getWeathersByExampleWithSort(@RequestParam(required = false) String state, @RequestParam(required = false) String city, @RequestParam(required = false) String sortCity) {
+    List<WeatherData> getWeathersByExampleWithSort(@RequestParam(required = false) String state,
+                                                   @RequestParam(required = false) String city,
+                                                   @RequestParam(name = "sort", required = false) String sortCity) {
+
         log.info("GET request to /weather with getWeathersByExample: state= " + state + " city=" + city + " sortCity=" + sortCity);
 
+        // Create Example
         WeatherData weatherDataExample = new WeatherData();
         weatherDataExample.setState(state);
         weatherDataExample.setCity(city);
-
-        log.info("GET request to /weather with getWeathersByExample: and create new WeatherData: " + weatherDataExample);
-
         Example<WeatherData> example = Example.of(weatherDataExample);
-        Sort sort = Sort.by(Sort.Order.asc("city"));
-        //Sort sort = Sort.by(Sort.Order.asc(PostComment_.CREATED_ON))
-        List<WeatherData> actual = weatherRepository.findAll(example, sort);
-        //<S extends T> List<S> findAll(Example<S> example, Sort sort);
+        log.info("GET request to /weather with getWeathersByExample: Create Example: " + weatherDataExample);
+
+        // Create required = false Sort
+        if (Objects.equals(sortCity, "city+") || Objects.equals(sortCity, "city-")) {
+            Sort sort;
+            if (Objects.equals(sortCity, "city+")) {
+                sort = Sort.by(Sort.Order.asc("city"));
+            } else {
+                sort = Sort.by(Sort.Order.desc("city"));
+            }
+            return weatherRepository.findAll(example, sort);
+        }
+
+        List<WeatherData> actual = weatherRepository.findAll(example);
+
         log.info("GET request to /weather with getWeathersByExample:  and return: " + actual);
         return actual;
     }
-
 
 
     /**
