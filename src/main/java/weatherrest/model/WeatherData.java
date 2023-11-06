@@ -2,6 +2,7 @@ package weatherrest.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -16,7 +17,7 @@ public class WeatherData {
     private Long id;
 
     @Column(name = "date")
-    private String date;
+    private LocalDate date;
 
     @Column(name = "lat")
     private Double lat;
@@ -37,7 +38,7 @@ public class WeatherData {
     // Constructors
 
     // Constructor without id
-    public WeatherData(String date, Double lat, Double lon, String city, String state, float[] temperatures) {
+    public WeatherData(LocalDate date, Double lat, Double lon, String city, String state, float[] temperatures) {
         this.date = date;
         this.lat = lat;
         this.lon = lon;
@@ -59,11 +60,11 @@ public class WeatherData {
         this.id = id;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
