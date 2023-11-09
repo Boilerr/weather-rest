@@ -15,6 +15,9 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -50,6 +53,30 @@ class WeatherControllerTest {
     void getOneById2() throws Exception {
         this.mockMvc.perform(get("/weather").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+    }
+
+    @Test
+    void getOneById3() throws Exception {
+        this.mockMvc.perform(delete("/weather/37").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("indexDelete", preprocessResponse(prettyPrint())));
+
+    }
+
+    @Test
+    void getOneById4() throws Exception {
+        this.mockMvc.perform(put("/weather/37").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("indexDelete", preprocessResponse(prettyPrint())));
+
+    }
+
+    @Test
+    void getOneById5() throws Exception {
+        this.mockMvc.perform(post("/weather/37").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("indexDelete", preprocessResponse(prettyPrint())));
 
     }
 }
