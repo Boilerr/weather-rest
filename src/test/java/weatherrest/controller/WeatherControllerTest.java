@@ -1,5 +1,6 @@
 package weatherrest.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.RequestDispatcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,35 +12,25 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import weatherrest.model.WeatherData;
 import weatherrest.repository.WeatherRepository;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-
-
 
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
@@ -58,12 +49,22 @@ class WeatherControllerTest {
     @BeforeEach
     public void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .apply(documentationConfiguration(restDocumentation)).build();
+                .apply(documentationConfiguration(restDocumentation))
+                .alwaysDo(document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())))
+                .build();
     }
 
 
-    /** GET */
+    /**
+     * GET
+     */
 
+    @Test
+    public void testGetUserName() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/users"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(containsString("John")));
+    }
 
 
     @Test
@@ -111,7 +112,18 @@ class WeatherControllerTest {
     }
 
 
-    /** PUT */
+    /**
+     * POST
+     */
+
+    @Test
+    void getOneById5() throws Exception {
+        this.mockMvc.perform(post("/weather/37").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("indexDelete", preprocessResponse(prettyPrint())));
+
+    }
+
 
     @Test
     void notesCreateExample() throws Exception {
@@ -122,7 +134,6 @@ class WeatherControllerTest {
         weather.put("city", "New York");
         weather.put("state", "New York");
         weather.put("temperatures", "17.3,16.8,16.4,16.0,15.6,15.3,15.0,14.9,15.8,18.0,20.2,22.3,23.8,24.9,25.5,25.7,24.9,23.0,21.7,20.8,29.9,29.2,28.6,28.1");
-
 
 
         String tagLocation = this.mockMvc
@@ -142,21 +153,15 @@ class WeatherControllerTest {
                                 this.objectMapper.writeValueAsString(note))).andExpect(
                         status().isCreated())
                 .andDo(document("notes-create-example"));
-                     /*   requestFields(
-                                fieldWithPath("title").description("The title of the note"),
-                                fieldWithPath("body").description("The body of the note"),
-                                fieldWithPath("tags").description("An array of tag resource URIs"))));*/
+        requestFields(
+                fieldWithPath("title").description("The title of the note"),
+                fieldWithPath("body").description("The body of the note"),
+                fieldWithPath("tags").description("An array of tag resource URIs"))));
     }
 
-
-
-    @Test
-    void getOneById3() throws Exception {
-        this.mockMvc.perform(delete("/weather/37").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(document("getOneById3", preprocessResponse(prettyPrint())));
-
-    }
+    /**
+     * PUT
+     */
 
     @Test
     void getOneById4() throws Exception {
@@ -166,20 +171,18 @@ class WeatherControllerTest {
 
     }
 
+
+    /**
+     * DELETE
+     */
+
     @Test
-    void getOneById5() throws Exception {
-        this.mockMvc.perform(post("/weather/37").accept(MediaType.APPLICATION_JSON))
+    void getOneById3() throws Exception {
+        this.mockMvc.perform(delete("/weather/37").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(document("indexDelete", preprocessResponse(prettyPrint())));
+                .andDo(document("getOneById3", preprocessResponse(prettyPrint())));
 
     }
-
-
-
-
-
-
-
 
 
 }
