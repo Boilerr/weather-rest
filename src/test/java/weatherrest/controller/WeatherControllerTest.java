@@ -23,11 +23,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -123,7 +129,7 @@ class WeatherControllerTest {
                 .andDo(document("indexDelete", preprocessResponse(prettyPrint())));
 
     }
-
+// todo remove pretty print from methods
 
     @Test
     void notesCreateExample() throws Exception {
@@ -184,5 +190,47 @@ class WeatherControllerTest {
 
     }
 
+    @Test
+    public void testGetWeather() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/weather"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(containsString("California")));
+    }
+
+    @Test
+    public void indexExample() throws Exception {
+        this.mockMvc.perform(get("/")).andExpect(status().isOk())
+                .andDo(document("index",
+                        links(linkWithRel("crud").description("The resource")),
+                        responseFields(subsectionWithPath("_links")
+                                .description("Links to other resources")),
+                        responseHeaders(headerWithName("Content-Type")
+                                .description("The Content-Type of the payload"))));
+    }
+
+    @Test
+    public void testWeather() throws Exception {
+        Map<String, Object> weather = new HashMap<>();
+        weather.put("title", "SomeWether");
+        weather.put("body", "Body");
+
+        this.mockMvc.perform(post("/crud").contentType("application/json")
+                        .content(this.objectMapper.writeValueAsString(weather)))
+                        .andExpect(status().isCreated())
+                        .andDo(document("create-crud-example",
+                        requestFields(fieldWithPath("id").description("The id of the input"),
+                                fieldWithPath("title").description("The title of the input"),
+                                fieldWithPath("body").description("The body of the input"),
+                                ))));
+    }
+
+
+    @Test
+    public void crudDeleteExample() throws Exception {
+        this.mockMvc.perform(delete("/crud/{id}", 10)).andExpect(status().isOk())
+                .andDo(document("crud-delete-example",
+                        pathParameters(
+                                parameterWithName("id").description("The id of the input to delete"))));
+    }
 
 }
