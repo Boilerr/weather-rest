@@ -10,7 +10,7 @@ public interface WeatherService {
 
     WeatherData addWeatherData(WeatherData weatherData) throws WeatherDataAlreadyExistsException;
     List<WeatherData> getAllWeatherData();
-    WeatherData getWeatherDataById(int id);
-    WeatherData deleteWeatherDataById(int id);
+    WeatherData getWeatherDataById(Long id);
+    WeatherData deleteWeatherDataById(Long id);
 
 }
