@@ -35,7 +35,10 @@ public class WeatherData {
     @Column(name = "temperatures")
     private float[] temperatures;
 
-    // Constructors
+
+    // Empty Constructor
+    public WeatherData() {
+    }
 
     // Constructor without id
     public WeatherData(LocalDate date, Double lat, Double lon, String city, String state, float[] temperatures) {
@@ -47,8 +50,6 @@ public class WeatherData {
         this.temperatures = temperatures;
     }
 
-    public WeatherData() {
-    }
 
     // Getters and Setters for all fields
 

@@ -12,20 +12,26 @@ import java.util.Optional;
 
 public interface WeatherService {
 
-    WeatherData addWeatherData(WeatherData weatherData) throws WeatherDataAlreadyExistsException;
-    List<WeatherData> getAllWeatherData();
-    WeatherData getWeatherDataById(Long id);
-    WeatherData deleteWeatherDataById(Long id);
+    WeatherData addWeather(WeatherData weatherData) throws WeatherDataAlreadyExistsException;
+    List<WeatherData> getAllWeather();
+    WeatherData getWeatherById(Long id);
+    WeatherData deleteWeatherById(Long id);
 
-    List<WeatherData> findAll();
+    List<WeatherData> findAllWeather();
 
-    Page<WeatherData> getAllWeatherWithPageable(Pageable pageable);
 
-    Page<WeatherData> getAllWeatherWithPageableAndSorting();
-
-    Optional<WeatherData> getOneWeatherDataById(Long weatherId);
+    Optional<WeatherData> getOneWeatherById(Long weatherId);
 
     List<WeatherData> getWeathersByExample(Example<WeatherData> example);
 
-    WeatherData saveNewWeatherData(WeatherData weatherData);
+    WeatherData saveNewWeather(WeatherData weatherData);
+
+
+    Long deleteByCity(String city);
+
+    WeatherData putWeather(WeatherData newWeatherData, Long id);
+
+    Page<WeatherData> getAllWeatherWithPageable(int pageNumber, int pageSize);
+
+    Page<WeatherData> getAllWeatherWithPageableAndSorting(int pageNumber, int pageSize, String sortByCity, boolean sortOrder);
 }
