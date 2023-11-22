@@ -89,8 +89,8 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     @Override
-    public Long deleteByCity(String city) {
-        return null;
+    public Long deleteWeatherByCity(String city) {
+        return weatherRepository.deleteByCity(city);
     }
 
     /**

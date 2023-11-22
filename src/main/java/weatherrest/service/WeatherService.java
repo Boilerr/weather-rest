@@ -2,7 +2,6 @@ package weatherrest.service;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import weatherrest.model.WeatherData;
 import weatherrest.exception.WeatherDataAlreadyExistsException;
 
@@ -27,7 +26,7 @@ public interface WeatherService {
     WeatherData saveNewWeather(WeatherData weatherData);
 
 
-    Long deleteByCity(String city);
+    Long deleteWeatherByCity(String city);
 
     WeatherData putWeather(WeatherData newWeatherData, Long id);
 
