@@ -55,6 +55,7 @@ curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?stat
 ```shell
 curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?state=Texas&city=Austin99'
 ```
+## Optional parameters
 - Check optional @RequestParam state
 ```shell
 curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?state=Maryland' | json_pp
@@ -70,6 +71,19 @@ curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?stat
 ```shell
 curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?city=Boston' | json_pp
 ```
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?state=Texas&city=NewYork&sort=-sort' | json_pp
+```
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?state=Texas&sort=sort' | json_pp
+```
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?city=NewYork&sort=-sort' | json_pp
+```
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?state=Texas&city=NewYork' | json_pp
+```
+
 
 POST
 ----------------------------------------
