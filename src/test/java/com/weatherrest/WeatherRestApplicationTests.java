@@ -1,4 +1,4 @@
-package com.weather_rest;
+package com.weatherrest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
