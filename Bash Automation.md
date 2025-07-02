@@ -90,3 +90,65 @@ DELETE `/weather/id`:
 curl -vX DELETE localhost:8080/api/v1/weather/3 | json_pp
 ```
 
+## deleteWeatherByCity
+
+```shell
+curl -vX DELETE localhost:8080/api/v1/weather?city=Houston
+````
+
+```shell
+curl -vX DELETE localhost:8080/api/v1/weather?city=Houston,Chicago
+````
+
+```shell
+curl -vX DELETE localhost:8080/api/v1/weather?state=California
+````
+
+- GET All weather
+
+```shell
+curl http://localhost:8080/api/v1/weather | json_pp
+```
+
+```shell
+curl -vH "Accept: application/json" http://localhost:8080/api/v1/weather
+```
+
+- GET weather by id
+
+```shell
+curl http://localhost:8080/api/v1/weather/2 
+```
+
+```shell
+curl -vH "Accept: application/json" http://localhost:8080/api/v1/weather/4
+```
+
+```shell
+curl -v http://localhost:8080/api/v1/weather/22 | json_pp
+```
+
+```shell
+curl -v http://localhost:8080/api/v1/weather/55
+```
+
+```shell
+curl --no-progress-meter -H "Accept: application/json" http://localhost:8080/api/v1/weather/185 | json_pp
+```
+
+- GET with `-d` data from file and add two `-H` Headers for request
+
+```shell
+curl -d @request.json -H "Content-Type: application/json" -H "Accept: application/json" http://localhost:8080/api/v1/weather
+```
+
+
+- Check @RequestParam state and city
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?state=Texas&city=Austin' | json_pp
+```
+
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?state=Texas&city=Austin99'
+```
+
