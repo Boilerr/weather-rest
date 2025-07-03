@@ -152,3 +152,88 @@ curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?stat
 curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?state=Texas&city=Austin99'
 ```
 
+## Optional parameters
+
+- Check optional @RequestParam state
+
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?state=Maryland' | json_pp
+```
+
+- Check optional @RequestParam state
+
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?state=Texas' | json_pp
+```
+
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?state=Texas,Maryland' | json_pp
+```
+
+- Check optional @RequestParam city
+
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?city=Boston' | json_pp
+```
+
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?state=Texas&city=NewYork&sort=-sort' | json_pp
+```
+
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?state=Texas&sort=sort' | json_pp
+```
+
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?city=NewYork&sort=-sort' | json_pp
+```
+
+```shell
+curl -v -H "Accept: application/json" 'http://localhost:8080/api/v1/weather?state=Texas&city=NewYork' | json_pp
+```
+
+## Prettify json with json_pp
+
+- GET All data!
+
+```shell
+curl -v localhost:8080/api/v1/weather | json_pp
+```
+
+- GET one by id
+
+```shell
+curl -v localhost:8080/api/v1/weather/12 | json_pp
+```
+
+## Write to file
+
+- Write to file response.json. With Append!
+
+```shell
+curl -vs http://localhost:8080/api/v1/weather/19 >> response.json
+```
+
+- Write ALL data from curl to a file, with Append
+
+```shell
+curl -vs http://localhost:8080/api/v1/weather/19 >> response.json 2>&1
+echo "" >> response.json
+```
+
+- Write to file response.json. With Append! and prettify. Write only prettify json!
+
+```shell
+curl http://localhost:8080/api/v1/weather/19 | json_pp >> response.json
+```
+
+```shell
+curl -v http://localhost:8080/api/v1/weather/19 >> response.json
+```
+
+- Write to file response.json. Not Append!
+
+```shell
+curl http://localhost:8080/api/v1/weather/19 -o response.json
+```
+
