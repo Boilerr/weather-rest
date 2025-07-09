@@ -25,5 +25,26 @@ public class WeatherController {
         this.weatherService = weatherService;
     }
 
- 
+   
+    @GetMapping(path = "",
+            produces = "application/json")
+    List<WeatherData> getAllWeather() {
+        List<WeatherData> weatherData = weatherService.getAllWeather();
+        log.info("GET to /weather, find: {} weather data and send", weatherData.size());
+        return weatherData;
+    }
+
+
+   
+    @GetMapping(path = "",
+            params = {"page", "size"},
+            produces = "application/json")
+    Page<WeatherData> getAllWeatherWithPageable(@RequestParam("page") int pageNumber,
+                                                @RequestParam("size") int pageSize) {
+        log.info("GET /weather with Pageable: page number={} page size={}", pageNumber, pageSize);
+
+        return weatherService.getAllWeatherWithPageable(pageNumber, pageSize);
+    }
+
+
 }
