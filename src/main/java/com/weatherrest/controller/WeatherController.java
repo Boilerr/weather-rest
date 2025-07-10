@@ -34,8 +34,7 @@ public class WeatherController {
         return weatherData;
     }
 
-
-   
+    
     @GetMapping(path = "",
             params = {"page", "size"},
             produces = "application/json")
@@ -46,5 +45,22 @@ public class WeatherController {
         return weatherService.getAllWeatherWithPageable(pageNumber, pageSize);
     }
 
+    
+    @GetMapping(path = "",
+            params = {"page", "size", "sort", "order"},
+            produces = "application/json")
+    Page<WeatherData> getAllWeatherWithPageableAndSorting(@RequestParam("page") int pageNumber,
+                                                          @RequestParam("size") int pageSize,
+                                                          @RequestParam("sort") String sortByCity,
+                                                          @RequestParam("order") boolean sortOrder) {
 
-}
+        log.info("GET request to /weather with PageableAndSorting: page number={}; page size={}; sort={}; order={};", pageNumber, pageSize, sortByCity, sortOrder);
+
+        return weatherService.getAllWeatherWithPageableAndSorting(pageNumber, pageSize, sortByCity, sortOrder);
+    }
+
+    
+    @GetMapping(path = "/{id}",
+            produces = "application/json")
+    Optional<WeatherData> getOneWeatherById(@PathVariable Long id) {
+        return weatherService.getOneWeatherById(id);
