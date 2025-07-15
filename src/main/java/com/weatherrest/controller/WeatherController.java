@@ -58,9 +58,38 @@ public class WeatherController {
 
         return weatherService.getAllWeatherWithPageableAndSorting(pageNumber, pageSize, sortByCity, sortOrder);
     }
-
-    
+ 
     @GetMapping(path = "/{id}",
             produces = "application/json")
     Optional<WeatherData> getOneWeatherById(@PathVariable Long id) {
         return weatherService.getOneWeatherById(id);
+ 
+
+    @PostMapping(path = "",
+            produces = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    WeatherData saveNewWeather(@RequestBody WeatherData newWeatherData) {
+        log.info("POST request to /weather with incoming data:            {}", newWeatherData);
+        return weatherService.saveNewWeather(newWeatherData);
+    }
+
+    @PutMapping(path = "/{id}",
+            produces = "application/json")
+    WeatherData putWeather(@RequestBody WeatherData newWeatherData, @PathVariable Long id) {
+        return weatherService.putWeather(newWeatherData, id);
+    }
+
+    @DeleteMapping(path = "/{id}",
+            produces = "application/json")
+    WeatherData deleteOneWeatherById(@PathVariable Long id) {
+        log.info("deleteOneWeatherById request to /weather with id:            {}", id);
+        return weatherService.deleteOneWeatherById(id);
+    }
+
+
+    @DeleteMapping(path = "",
+            produces = "application/json")
+    Long deleteAllWeathersByCity(@RequestParam String city) {
+        return weatherService.deleteAllWeathersByCity(city);
+    }
+}
