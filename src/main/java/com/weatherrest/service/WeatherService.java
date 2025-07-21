@@ -36,4 +36,37 @@ public interface WeatherService {
     Page<WeatherData> getAllWeatherWithPageable(int pageNumber, int pageSize);
 
     List<WeatherData> getAllWeather();
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*WeatherData addWeather(WeatherData weatherData) throws WeatherDataAlreadyExistsException;
+    List<WeatherData> getAllWeather();
+    WeatherData getWeatherById(Long id);
+    WeatherData deleteWeatherById(Long id);
+
+    List<WeatherData> findAllWeather();
+
+
+    Optional<WeatherData> getOneWeatherById(Long weatherId);
+
+    List<WeatherData> getWeathersByExample(Example<WeatherData> example);
+
+    WeatherData saveNewWeather(WeatherData weatherData);
+
+
+    Long deleteWeatherByCity(String city);
+
+    WeatherData putWeather(WeatherData newWeatherData, Long id);
+
+    Page<WeatherData> getAllWeatherWithPageable(int pageNumber, int pageSize);
+
+    Page<WeatherData> getAllWeatherWithPageableAndSorting(int pageNumber, int pageSize, String sortByCity, boolean sortOrder);*/
 }
