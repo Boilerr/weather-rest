@@ -108,7 +108,7 @@ public class WeatherData {
     }
 
 
-    // equals, hashCode and toString
+    // equals(), hashCode() and toString()
 
     @Override
     public boolean equals(Object o) {
