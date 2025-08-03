@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class ResourceNotFoundAdvice {
 
-@ResponseBody
-    @ExceptionHandler(com.weatherrest.exception.ResourceNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    String resourceNotFoundHandler(com.weatherrest.exception.ResourceNotFoundException ex) {
-        return ex.getMessage();
-    }
+	@ResponseBody
+	@ExceptionHandler(ResourceNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	String resourceNotFoundHandler(ResourceNotFoundException ex) {
+		return ex.getMessage();
+	}
 
 }
